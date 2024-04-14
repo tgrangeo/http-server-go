@@ -46,4 +46,5 @@ func handleConn(connection net.Conn) {
 	} else {
 		connection.Write([]byte("HTTP/1.1 404 Not Found\r\n\r\n"))
 	}
+	return
 }
