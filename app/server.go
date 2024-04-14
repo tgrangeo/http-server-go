@@ -36,7 +36,7 @@ func main() {
 		str := strings.TrimPrefix(path, "/echo/")
 		len := strconv.Itoa(len(str))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + str + "\r\n"))
-	}else if strings.HasPrefix(path, "/user-agent/"){
+	}else if strings.HasPrefix(path, "/User-Agent/"){
 		len := strconv.Itoa(len(userAgent))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + userAgent + "\r\n"))
 	} else {
