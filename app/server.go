@@ -34,6 +34,8 @@ func main() {
 		len := strconv.Itoa(len(str))
 		fmt.Println(str, len)
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\n" + str + "\r\n\r\n"))
+	} else if path == "/"{
+		connection.Write([]byte("HTTP/1.1 200 OK\r\n"))
 	} else {
 		connection.Write([]byte("HTTP/1.1 404 Not Found\r\n\r\n"))
 	}
