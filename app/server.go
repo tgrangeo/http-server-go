@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -18,5 +19,18 @@ func main() {
 		fmt.Println("Error accepting connection: ", err.Error())
 		os.Exit(1)
 	}
-	fmt.Fprintf(connection, "HTTP/1.1 200 OK\r\n\r\n")
+	b := make([]byte,1024)
+	_,err = connection.Read(b)
+	if err != nil{
+		fmt.Println("Failed to bind to port 4221")
+		os.Exit(1)
+	}
+	request := string(b)
+	status := strings.Split(request, "\r\n")
+	path := strings.Split(status[0], " ")[1]
+	if path == "/" {
+		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
+	} else {
+		connection.Write([]byte("HTTP/1.1 404 Not Found\r\n\r\n"))
+	}
 }
