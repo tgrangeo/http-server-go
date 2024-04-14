@@ -37,8 +37,7 @@ func main() {
 		len := strconv.Itoa(len(str))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + str + "\r\n"))
 	}else if strings.HasPrefix(path, "/user-agent/"){
-		str := strings.TrimPrefix(path, "/echo/")
-		len := strconv.Itoa(len(str))
+		len := strconv.Itoa(len(userAgent))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + userAgent + "\r\n"))
 	} else {
 		connection.Write([]byte("HTTP/1.1 404 Not Found\r\n\r\n"))
