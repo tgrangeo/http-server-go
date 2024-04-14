@@ -39,7 +39,7 @@ func handleConn(connection net.Conn) {
 
 	if path == "/" {
 		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
-	} else if path == "/file/" {
+	} else if path == "/files/" {
 		file_name := strings.TrimPrefix(path, "/file/")
 		f, err := os.ReadFile(file_name)
 		content := string(f)
