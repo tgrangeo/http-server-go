@@ -14,6 +14,7 @@ func main() {
 		fmt.Println("Failed to bind to port 4221")
 		os.Exit(1)
 	}
+	defer l.Close()
 	for {
 		connection, err := l.Accept()
 		if err != nil {
@@ -25,6 +26,7 @@ func main() {
 }
 
 func handleConn(connection net.Conn) {
+	defer connection.Close()
 	b := make([]byte, 1024)
 	_, err := connection.Read(b)
 	if err != nil {
@@ -34,7 +36,6 @@ func handleConn(connection net.Conn) {
 	request := string(b)
 	status := strings.Split(request, "\r\n")
 	path := strings.Split(status[0], " ")[1]
-	userAgent := strings.Split(status[2], " ")[1]
 
 	if path == "/" {
 		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
@@ -43,6 +44,7 @@ func handleConn(connection net.Conn) {
 		len := strconv.Itoa(len(str))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + str + "\r\n"))
 	} else if strings.HasPrefix(path, "/user-agent") {
+		userAgent := strings.Split(status[2], " ")[1]
 		len := strconv.Itoa(len(userAgent))
 		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + len + "\r\n\r\n" + userAgent + "\r\n"))
 	} else {
