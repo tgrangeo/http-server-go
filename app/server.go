@@ -39,6 +39,16 @@ func handleConn(connection net.Conn) {
 
 	if path == "/" {
 		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
+	} else if path == "/file/" {
+		file_name := strings.TrimPrefix(path, "/file/")
+		f, err := os.ReadFile(file_name)
+		content := string(f)
+		len := strconv.Itoa(len(content))
+		if err != nil {
+			fmt.Println("Failed open the file", err)
+			os.Exit(1)
+		}
+		connection.Write([]byte("HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + len + "\r\n\r\n" + content + "\r\n"))
 	} else if strings.HasPrefix(path, "/echo/") {
 		str := strings.TrimPrefix(path, "/echo/")
 		len := strconv.Itoa(len(str))
