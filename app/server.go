@@ -30,7 +30,7 @@ func main() {
 	status := strings.Split(request, "\r\n")
 	path := strings.Split(status[0], " ")[1]
 	if path == "/"{
-		connection.Write([]byte("HTTP/1.1 200 OK\r\n"))
+		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
 	}else if strings.HasPrefix(path, "/echo/"){
 		str := strings.TrimPrefix(path, "/echo/")
 		len := strconv.Itoa(len(str))
