@@ -15,15 +15,18 @@ func main() {
 		os.Exit(1)
 	}
 	defer l.Close()
-	connection, err := l.Accept()
-	if err != nil {
-		fmt.Println("Error accepting connection: ", err.Error())
-		os.Exit(1)
+	for {
+		connection, err := l.Accept()
+		if err != nil {
+			fmt.Println("Error accepting connection: ", err.Error())
+			os.Exit(1)
+		}
+		go handleConn(connection)
 	}
-	go handleConn(connection)
 }
 
 func handleConn(connection net.Conn) {
+	defer connection.Close()
 	b := make([]byte, 1024)
 	_, err := connection.Read(b)
 	if err != nil {
