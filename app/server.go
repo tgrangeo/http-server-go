@@ -14,7 +14,6 @@ func main() {
 		fmt.Println("Failed to bind to port 4221")
 		os.Exit(1)
 	}
-	defer l.Close()
 	for {
 		connection, err := l.Accept()
 		if err != nil {
@@ -26,7 +25,6 @@ func main() {
 }
 
 func handleConn(connection net.Conn) {
-	defer connection.Close()
 	b := make([]byte, 1024)
 	_, err := connection.Read(b)
 	if err != nil {
@@ -37,6 +35,7 @@ func handleConn(connection net.Conn) {
 	status := strings.Split(request, "\r\n")
 	path := strings.Split(status[0], " ")[1]
 	userAgent := strings.Split(status[2], " ")[1]
+
 	if path == "/" {
 		connection.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
 	} else if strings.HasPrefix(path, "/echo/") {
